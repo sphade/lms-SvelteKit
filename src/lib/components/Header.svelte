@@ -5,13 +5,18 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 </script>
 
-<header class="flex items-center justify-between px-8 py-5">
+<header
+	class="flex items-center z-50 border-b sticky top-0 left-0 bg-white justify-between px-8 py-5"
+>
 	<Logo />
 	<div class="flex items-center gap-5">
 		<Button variant="link" class="text-sm  hidden lg:inline-block">How it works</Button>
 		<Button variant="link" class="text-sm  hidden lg:inline-block">List an item</Button>
-		<Button variant="ghost" size="lg" class="rounded-full text-lg hidden md:inline-block"
-			>Login or signup</Button
+		<Button
+			variant="ghost"
+			size="lg"
+			href="/login"
+			class="rounded-full text-lg hidden md:inline-block">Login or signup</Button
 		>
 
 		<DropdownMenu.Root>

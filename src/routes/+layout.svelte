@@ -15,5 +15,7 @@
 </script>
 
 <Header />
-<slot />
+<main class="min-h-[70vh] max-w-6xl mx-auto">
+	<slot />
+</main>
 <Footer />

@@ -12,8 +12,9 @@
 		"format": "prettier --write ."
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-auto": "^2.0.0",
-		"@sveltejs/kit": "^1.27.4",
+		"@sveltejs/adapter-auto": "^3.0.0",
+		"@sveltejs/kit": "^2.0.0",
+		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@typescript-eslint/eslint-plugin": "^6.0.0",
 		"@typescript-eslint/parser": "^6.0.0",
 		"autoprefixer": "^10.4.14",
@@ -29,15 +30,19 @@
 		"tailwindcss": "^3.3.2",
 		"tslib": "^2.4.1",
 		"typescript": "^5.0.0",
-		"vite": "^4.4.2"
+		"vite": "^5.0.0"
 	},
 	"type": "module",
 	"dependencies": {
 		"@fontsource/noto-sans": "^5.0.18",
+		"@internationalized/date": "^3.5.1",
 		"bits-ui": "^0.11.6",
 		"clsx": "^2.0.0",
+		"formsnap": "^0.4.1",
 		"lucide-svelte": "^0.294.0",
+		"sveltekit-superforms": "^1.13.1",
 		"tailwind-merge": "^2.1.0",
-		"tailwind-variants": "^0.1.18"
+		"tailwind-variants": "^0.1.18",
+		"zod": "^3.22.4"
 	}
 }

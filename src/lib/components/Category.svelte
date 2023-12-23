@@ -1,5 +1,5 @@
 <script lang="ts">
-	import CategoryCard from './components/CategoryCard.svelte';
+	import CategoryCard from './CategoryCard.svelte';
 	let categories = [
 		{
 			title: 'film $ photography',

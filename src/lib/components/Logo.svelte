@@ -1,4 +1,3 @@
-<a href="/">
-<img src="/logoWithLarry.svg" alt="logo">
-
-</a>
+<div>
+	<img src="/logoWithLarry.svg" class="" alt="" />
+</div>

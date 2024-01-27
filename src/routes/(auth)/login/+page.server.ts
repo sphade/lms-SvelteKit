@@ -1,6 +1,7 @@
-import { superValidate } from 'sveltekit-superforms/server';
+import { message, superValidate } from 'sveltekit-superforms/server';
 import { loginSchema } from '$lib/schema';
-import { fail } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
+import type { ClientResponseError } from 'pocketbase';
 export const load = async () => {
 	const form = await superValidate(loginSchema);
 
@@ -11,17 +12,23 @@ export const load = async () => {
 
 export const actions = {
 	default: async (event) => {
-		// Simulate loading state for 5 seconds
-		await new Promise((resolve) => setTimeout(resolve, 5000));
-
+		const {
+			locals: { pb }
+		} = event;
 		const form = await superValidate(event, loginSchema);
 		if (!form.valid) {
 			return fail(400, {
 				form
 			});
 		}
-		return {
-			form
-		};
+		try {
+			await pb.collection('users').authWithPassword(form.data.email, form.data.password);
+		} catch (e) {
+			console.log('🚀 ~ default: ~ e:', e);
+			const { status } = e as ClientResponseError;
+
+			return message(form, { status, message: 'an error occurred' });
+		}
+		redirect(303, '/');
 	}
 };

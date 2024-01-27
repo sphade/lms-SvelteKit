@@ -1,5 +1,4 @@
-<script>
-	import Header from '$lib/components/Header.svelte';
+<script lang="ts">
 	import '@fontsource/noto-sans';
 	import '@fontsource/noto-sans/100.css';
 	import '@fontsource/noto-sans/200.css';
@@ -10,12 +9,13 @@
 	import '@fontsource/noto-sans/700.css';
 	import '@fontsource/noto-sans/800.css';
 	import '@fontsource/noto-sans/900.css';
+	import 'quill/dist/quill.snow.css';
+
 	import '../app.pcss';
-	import Footer from '$lib/components/Footer.svelte';
+	import { Toaster } from '$lib/components/ui/sonner';
 </script>
 
-<Header />
-<main class="min-h-[70vh] max-w-6xl mx-auto">
+<Toaster richColors closeButton />
+<div class="h-screen">
 	<slot />
-</main>
-<Footer />
+</div>

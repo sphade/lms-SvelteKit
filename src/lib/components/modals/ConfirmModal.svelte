@@ -53,7 +53,7 @@
 			>
 				<Button class="w-full" type="submit">
 					{#if isDeleting}
-						<Loader2 class="h-6 w-6 animate-spin " />
+						<Loader2 class="size-6 animate-spin " />
 					{:else}
 						Continue
 					{/if}

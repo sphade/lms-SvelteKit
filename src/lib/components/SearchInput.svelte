@@ -9,7 +9,7 @@
 </script>
 
 <div class="relative">
-	<Search class="h-4 w-4 absolute top-3 left-3 text-slate-600" />
+	<Search class="size-4 absolute top-3 left-3 text-slate-600" />
 	<Input
 		bind:value={$currentTitle}
 		placeholder="Search for a course"

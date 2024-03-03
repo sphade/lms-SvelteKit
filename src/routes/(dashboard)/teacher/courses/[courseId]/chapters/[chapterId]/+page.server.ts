@@ -5,7 +5,8 @@ import type { ClientResponseError } from 'pocketbase';
 import { message, superValidate } from 'sveltekit-superforms/server';
 import Mux from '@mux/mux-node';
 import { MUX_TOKEN_ID, MUX_TOKEN_SECRET } from '$env/static/private';
-const { Video } = new Mux(MUX_TOKEN_ID, MUX_TOKEN_SECRET);
+import { zod } from 'sveltekit-superforms/adapters';
+const mux = new Mux({ tokenId: MUX_TOKEN_ID, tokenSecret: MUX_TOKEN_SECRET });
 
 export const load = async ({ params, locals: { pb } }) => {
 	const chapterId = params.chapterId;
@@ -27,9 +28,9 @@ export const load = async ({ params, locals: { pb } }) => {
 		}
 	}
 	const chapter = await getChapter();
-	const chapterTitleForm = await superValidate(chapter, chapterTitleSchema);
-	const chapterDescriptionForm = await superValidate(chapter, chapterDescriptionSchema);
-	const chapterAccessForm = await superValidate(chapter, chapterAccessSchema);
+	const chapterTitleForm = await superValidate(chapter, zod(chapterTitleSchema));
+	const chapterDescriptionForm = await superValidate(chapter, zod(chapterDescriptionSchema));
+	const chapterAccessForm = await superValidate(chapter, zod(chapterAccessSchema));
 
 	return {
 		chapter,
@@ -47,7 +48,7 @@ export const actions = {
 		} = event;
 		const { chapterId } = params;
 
-		const form = await superValidate(event, chapterTitleSchema);
+		const form = await superValidate(event, zod(chapterTitleSchema));
 		if (!form.valid) {
 			return fail(400, {
 				form
@@ -72,7 +73,7 @@ export const actions = {
 		} = event;
 		const { chapterId } = params;
 
-		const form = await superValidate(event, chapterDescriptionSchema);
+		const form = await superValidate(event, zod(chapterDescriptionSchema));
 		if (!form.valid) {
 			return fail(400, {
 				form
@@ -96,7 +97,7 @@ export const actions = {
 		} = event;
 		const { chapterId } = params;
 
-		const form = await superValidate(event, chapterAccessSchema);
+		const form = await superValidate(event, zod(chapterAccessSchema));
 		if (!form.valid) {
 			return fail(400, {
 				form
@@ -139,12 +140,12 @@ export const actions = {
 			const videoUrl = pb.files.getUrl(chapter, chapter.videoUrl);
 
 			if (existingMuxData) {
-				await Video.Assets.del(existingMuxData.assetId);
+				await mux.video.assets.delete(existingMuxData.assetId);
 				await pb.collection('muxData').delete(existingMuxData.id);
 			}
-			const asset = await Video.Assets.create({
-				input: videoUrl,
-				playback_policy: 'public',
+			const asset = await mux.video.assets.create({
+				input: [{ url: videoUrl }],
+				playback_policy: ['public'],
 				test: false
 			});
 			await pb.collection('muxData').create({
@@ -177,7 +178,7 @@ export const actions = {
 		}
 		try {
 			if (existingMuxData) {
-				await Video.Assets.del(existingMuxData.assetId);
+				await mux.video.assets.delete(existingMuxData.assetId);
 				await pb.collection('muxData').delete(existingMuxData.id);
 			}
 			await pb.collection('chapters').delete(chapterId);

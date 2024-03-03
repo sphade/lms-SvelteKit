@@ -20,7 +20,7 @@
 <div class="flex gap-x-2 ml-auto">
 	{#if isTeacherPage || isPlayerPage}
 		<Button href="/" size="sm" variant="ghost">
-			<LogOut class="h-4 w-4 mr-2" />
+			<LogOut class="size-4 mr-2" />
 			Exit
 		</Button>
 	{:else}

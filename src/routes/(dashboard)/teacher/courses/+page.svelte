@@ -59,7 +59,7 @@
 	<div class="flex items-center py-4">
 		<Input class="max-w-sm" placeholder="Filter emails..." type="text" bind:value={$filterValue} />
 		<Button href="/teacher/create" class="ml-auto"
-			><PlusCircle class="h-4 w-4 mr-2" />New course</Button
+			><PlusCircle class="size-4 mr-2" />New course</Button
 		>
 	</div>
 

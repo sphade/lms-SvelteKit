@@ -9,5 +9,6 @@
   "aliases": {
     "components": "$lib/components",
     "utils": "$lib/utils"
-  }
+  },
+  "typescript": true
 }

@@ -4,11 +4,29 @@
 	import * as Form from '$lib/components/ui/form';
 	import { Loader2, Pencil } from 'lucide-svelte';
 	import Button from './ui/button/button.svelte';
-	import type { SuperValidated } from 'sveltekit-superforms';
+	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { page } from '$app/stores';
 	import { titleSchema } from '$lib/schema';
-	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
-	export let form: SuperValidated<typeof titleSchema>;
+	import { zodClient } from 'sveltekit-superforms/adapters';
+	import Input from './ui/input/input.svelte';
+	type TitleSchema = typeof titleSchema;
+	export let data: SuperValidated<Infer<TitleSchema>>;
+	const form = superForm(data, {
+		validators: zodClient(titleSchema),
+		resetForm: false,
+		onUpdated({ form }) {
+			if (form.message) {
+				if (!form.valid) {
+					toast.error(form.message);
+				}
+				if (form.valid) {
+					toast.success(form.message);
+					toggleEdit();
+				}
+			}
+		}
+	});
+	const { form: formData, enhance, delayed, submitting } = form;
 	let isEditing = false;
 	function toggleEdit() {
 		isEditing = !isEditing;
@@ -23,54 +41,39 @@
 			{#if isEditing}
 				cancel
 			{:else}
-				<Pencil class="h-4 w-4 mr-2" />
+				<Pencil class="size-4 mr-2" />
 				Edit title
 			{/if}
 		</Button>
 	</div>
 	{#if !isEditing}
 		<p class="text-sm mt-2">
-			{form.data.title}
+			{data.data.title}
 		</p>
 	{:else}
-		<Form.Root
+		<form
 			method="POST"
-			schema={titleSchema}
 			action="/teacher/courses/{$page.params.courseId}/?/updateTitle"
-			{form}
-			let:config
-			let:delayed
-			let:submitting
-			options={{
-				onUpdated({ form }) {
-					if (form.message) {
-						if (!form.valid) {
-							toast.error(form.message);
-						}
-						if (form.valid) {
-							toast.success(form.message);
-							toggleEdit();
-						}
-					}
-				}
-			}}
+			use:enhance
 			class="space-y-4 mt-4"
 		>
-			<Form.Field {config} name="title">
-				<Form.Item>
-					<Form.Input disabled={submitting} placeholder="advance web development" />
-					<Form.Validation />
-				</Form.Item>
+			<Form.Field {form} name="title">
+				<Form.Control let:attrs>
+					<Form.Label>Title</Form.Label>
+					<Input {...attrs} placeholder="advance web development" bind:value={$formData.title} />
+				</Form.Control>
+				<Form.FieldErrors />
 			</Form.Field>
+
 			<div class="flex items-center gap-x-2">
-				<Form.Button disabled={submitting}
-					>{#if delayed}
-						<Loader2 class="h-6 w-6 animate-spin " />
+				<Form.Button disabled={$submitting}
+					>{#if $delayed}
+						<Loader2 class="size-6 animate-spin " />
 					{:else}
 						save
 					{/if}</Form.Button
 				>
 			</div>
-		</Form.Root>
+		</form>
 	{/if}
 </div>

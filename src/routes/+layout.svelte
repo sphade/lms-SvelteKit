@@ -13,9 +13,11 @@
 
 	import '../app.pcss';
 	import { Toaster } from '$lib/components/ui/sonner';
+	import { ModeWatcher } from 'mode-watcher';
 </script>
 
-<Toaster richColors closeButton />
+<ModeWatcher defaultMode={'light'} />
+<Toaster richColors closeButton theme="light" />
 <div class="h-screen">
 	<slot />
 </div>

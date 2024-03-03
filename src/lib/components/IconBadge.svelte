@@ -13,7 +13,7 @@
 
 			size: {
 				default: 'p-2 h-10 w-10',
-				sm: 'p-1 h-6 w-6 '
+				sm: 'p-1 size-6 '
 			}
 		},
 		defaultVariants: {

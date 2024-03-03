@@ -28,10 +28,10 @@
 			{#if isEditing}
 				cancel
 			{:else if !attachments.length}
-				<PlusCircle class="h-4 w-4 mr-2" />
+				<PlusCircle class="size-4 mr-2" />
 				add a file
 			{:else}
-				<Pencil class="h-4 w-4 mr-2" />
+				<Pencil class="size-4 mr-2" />
 				Edit image
 			{/if}
 		</Button>
@@ -88,7 +88,7 @@
 							type="submit"
 						>
 							{#if uploading}
-								<Loader2 class="h-6 w-6 animate-spin " />
+								<Loader2 class="size-6 animate-spin " />
 							{:else}
 								upload {fileInput?.length} file
 							{/if}
@@ -138,7 +138,7 @@
 					<input type="hidden" name="id" value={attachment.id} />
 
 					<button class=" hover:opacity-75 transition-all">
-						<X class="h-4 w-4 " />
+						<X class="size-4 " />
 					</button>
 				</form>
 			</div>

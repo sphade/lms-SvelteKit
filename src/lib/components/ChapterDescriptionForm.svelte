@@ -3,15 +3,31 @@
 	import * as Form from '$lib/components/ui/form';
 	import { Loader2, Pencil } from 'lucide-svelte';
 	import Button from './ui/button/button.svelte';
-	import type { SuperValidated } from 'sveltekit-superforms';
+	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { cn } from '$lib/utils';
 	import { chapterDescriptionSchema } from '$lib/schema';
 	import Editor from './Editor.svelte';
 
 	import 'quill/dist/quill.snow.css';
 	import Preview from './Preview.svelte';
+	import { zodClient } from 'sveltekit-superforms/adapters';
 
-	export let form: SuperValidated<typeof chapterDescriptionSchema>;
+	export let data: SuperValidated<Infer<typeof chapterDescriptionSchema>>;
+	const form = superForm(data, {
+		validators: zodClient(chapterDescriptionSchema),
+		onUpdated({ form }) {
+			if (form.message) {
+				if (!form.valid) {
+					toast.error(form.message);
+				}
+				if (form.valid) {
+					toast.success(form.message);
+					toggleEdit();
+				}
+			}
+		}
+	});
+	const { form: formData, enhance, delayed, submitting } = form;
 	let isEditing = false;
 
 	function toggleEdit() {
@@ -27,7 +43,7 @@
 			{#if isEditing}
 				cancel
 			{:else}
-				<Pencil class="h-4 w-4 mr-2" />
+				<Pencil class="size-4 mr-2" />
 				Edit description
 			{/if}
 		</Button>
@@ -35,54 +51,34 @@
 	{#if !isEditing}
 		<p
 			class={cn('text-sm mt-2 break-all', {
-				'text-muted-foreground': !form.data.description || form.data.description === '<p><br></p>'
+				'text-muted-foreground': !data.data.description || data.data.description === '<p><br></p>'
 			})}
 		>
-			{#if !form.data.description || form.data.description === '<p><br></p>'}
+			{#if !data.data.description || data.data.description === '<p><br></p>'}
 				No description
 			{:else}
-				<Preview value={form.data.description} />
+				<Preview value={data.data.description} />
 			{/if}
 		</p>
 	{:else}
-		<Form.Root
-			method="POST"
-			schema={chapterDescriptionSchema}
-			action="?/updateDescription"
-			{form}
-			let:config
-			let:delayed
-			let:submitting
-			options={{
-				onUpdated({ form }) {
-					if (form.message) {
-						if (!form.valid) {
-							toast.error(form.message);
-						}
-						if (form.valid) {
-							toast.success(form.message);
-							toggleEdit();
-						}
-					}
-				}
-			}}
-			class="space-y-4 mt-4"
-		>
-			<Form.Field {config} name="description">
-				<Form.Item>
+		<form method="POST" action="?/updateDescription" use:enhance class="space-y-4 mt-4">
+			<Form.Field {form} name="description">
+				<Form.Control let:attrs>
+					<Form.Label>Description</Form.Label>
+
 					<Editor />
-					<Form.Validation />
-				</Form.Item>
+				</Form.Control>
+				<Form.FieldErrors />
 			</Form.Field>
 			<div class="flex items-center gap-x-2">
-				<Form.Button disabled={submitting}
-					>{#if delayed}
-						<Loader2 class="h-6 w-6 animate-spin " />
+				<Form.Button disabled={$submitting}
+					>{#if $delayed}
+						<Loader2 class="size-6 animate-spin " />
 					{:else}
 						save
 					{/if}</Form.Button
 				>
 			</div>
-		</Form.Root>
+		</form>
 	{/if}
 </div>

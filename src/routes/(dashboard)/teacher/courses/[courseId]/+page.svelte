@@ -36,7 +36,7 @@
 
 {#if !course.isPublished}
 	<Alert.Root class="bg-yellow-200/80 border border-yellow-300 rounded-none ">
-		<AlertTriangle class="h-4 w-4" />
+		<AlertTriangle class="size-4" />
 		<Alert.Title>Heads up!</Alert.Title>
 		<Alert.Description
 			>This course is unpublished , It will not be visible to the students</Alert.Description
@@ -61,10 +61,10 @@
 				<IconBadge icon={LayoutDashboard} />
 				<h2 class="text-xl">Customize your course</h2>
 			</div>
-			<TitleForm form={data.titleForm} />
-			<DescriptionForm form={data.descriptionForm} />
+			<TitleForm data={data.titleForm} />
+			<DescriptionForm data={data.descriptionForm} />
 			<ImageForm imageUrl={course.imageUrl} />
-			<CategoryForm categories={data.categories} form={data.categoryForm} />
+			<CategoryForm categories={data.categories} data={data.categoryForm} />
 		</div>
 		<div class="space-y-6">
 			<div>
@@ -74,7 +74,7 @@
 				</div>
 				<ChapterForm
 					chapters={data.course.expand?.['chapters(course)'] ?? []}
-					form={data.chapterTitleForm}
+					data={data.chapterTitleForm}
 				/>
 			</div>
 			<div>
@@ -82,7 +82,7 @@
 					<IconBadge icon={CircleDollarSign} />
 					<h2 class="text-xl">Sell your course</h2>
 				</div>
-				<PriceForm form={data.priceForm} />
+				<PriceForm data={data.priceForm} />
 			</div>
 			<div>
 				<div class="flex items-center gap-x-2">

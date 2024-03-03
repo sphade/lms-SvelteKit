@@ -36,7 +36,7 @@
 	>
 		<Button type="submit" {disabled} variant="outline" size="sm">
 			{#if isLoading}
-				<Loader2 class="h-6 w-6 animate-spin " />
+				<Loader2 class="size-6 animate-spin " />
 			{:else if isPublished}
 				Unpublish
 			{:else}
@@ -46,7 +46,7 @@
 	</form>
 	<ConfirmModal action="?/deleteChapter">
 		<Button size="icon">
-			<Trash class="h-4 w-4" />
+			<Trash class="size-4" />
 		</Button>
 	</ConfirmModal>
 </div>

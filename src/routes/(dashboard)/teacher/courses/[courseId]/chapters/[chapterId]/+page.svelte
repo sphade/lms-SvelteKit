@@ -20,7 +20,7 @@
 
 {#if !chapter.isPublished}
 	<Alert.Root class="bg-yellow-200/80 border border-yellow-300 rounded-none ">
-		<AlertTriangle class="h-4 w-4" />
+		<AlertTriangle class="size-4" />
 		<Alert.Title>Heads up!</Alert.Title>
 		<Alert.Description
 			>This chapter is unpublished , It will not be visible in the course</Alert.Description
@@ -34,7 +34,7 @@
 				href="/teacher/courses/{$page.params.courseId}"
 				class="flex items-center text-sm hover:opacity-75 transition mb-6"
 			>
-				<ArrowLeft class="h-4 w-4 mr-2" />
+				<ArrowLeft class="size-4 mr-2" />
 				Back to course
 			</a>
 			<div class="flex items-center justify-between w-full">
@@ -53,15 +53,15 @@
 					<IconBadge icon={LayoutDashboard} />
 					<h2 class="text-xl">Customize your chapter</h2>
 				</div>
-				<ChapterTitleForm form={data.chapterTitleForm} />
-				<ChapterDescriptionForm form={data.chapterDescriptionForm} />
+				<ChapterTitleForm data={data.chapterTitleForm} />
+				<ChapterDescriptionForm data={data.chapterDescriptionForm} />
 			</div>
 			<div>
 				<div class="flex items-center gap-x-2">
 					<IconBadge icon={Eye} />
 					<h2 class="text-xl">Access Settings</h2>
 				</div>
-				<ChapterAccessForm form={data.chapterAccessForm} />
+				<ChapterAccessForm data={data.chapterAccessForm} />
 			</div>
 		</div>
 		<div>

@@ -11,7 +11,8 @@ import {
 } from '$lib/schema.js';
 import Mux from '@mux/mux-node';
 import { MUX_TOKEN_ID, MUX_TOKEN_SECRET } from '$env/static/private';
-const { Video } = new Mux(MUX_TOKEN_ID, MUX_TOKEN_SECRET);
+import { zod } from 'sveltekit-superforms/adapters';
+const mux = new Mux({ tokenId: MUX_TOKEN_ID, tokenSecret: MUX_TOKEN_SECRET });
 
 export const load = async ({ params, locals: { pb, user } }) => {
 	const { courseId } = params;
@@ -64,12 +65,11 @@ export const load = async ({ params, locals: { pb, user } }) => {
 	// 	}
 	// }
 	const [course, categories] = await Promise.all([getCourse(), getCategories()]);
-
-	const titleForm = await superValidate(course, titleSchema);
-	const descriptionForm = await superValidate(course, descriptionSchema);
-	const categoryForm = await superValidate(course, categorySchema);
-	const priceForm = await superValidate(course, priceSchema);
-	const chapterTitleForm = await superValidate(chapterTitleSchema, { id: 'chapterTitleForm' });
+	const titleForm = await superValidate(course, zod(titleSchema));
+	const descriptionForm = await superValidate(course, zod(descriptionSchema));
+	const categoryForm = await superValidate(course, zod(categorySchema));
+	const priceForm = await superValidate(course, zod(priceSchema));
+	const chapterTitleForm = await superValidate(zod(chapterTitleSchema), { id: 'chapterTitleForm' });
 	return {
 		course,
 		categories,
@@ -89,7 +89,7 @@ export const actions = {
 		} = event;
 		const { courseId } = params;
 
-		const form = await superValidate(event, titleSchema);
+		const form = await superValidate(event, zod(titleSchema));
 		if (!form.valid) {
 			return fail(400, {
 				form
@@ -114,7 +114,7 @@ export const actions = {
 		} = event;
 		const { courseId } = params;
 
-		const form = await superValidate(event, descriptionSchema);
+		const form = await superValidate(event, zod(descriptionSchema));
 		if (!form.valid) {
 			return fail(400, {
 				form
@@ -168,7 +168,7 @@ export const actions = {
 		} = event;
 		const { courseId } = params;
 
-		const form = await superValidate(event, categorySchema);
+		const form = await superValidate(event, zod(categorySchema));
 		if (!form.valid) {
 			return fail(400, {
 				form
@@ -193,7 +193,7 @@ export const actions = {
 		} = event;
 		const { courseId } = params;
 
-		const form = await superValidate(event, priceSchema);
+		const form = await superValidate(event, zod(priceSchema));
 		if (!form.valid) {
 			return fail(400, {
 				form
@@ -269,7 +269,7 @@ export const actions = {
 		} = event;
 		const { courseId } = params;
 
-		const form = await superValidate(event, chapterTitleSchema);
+		const form = await superValidate(event, zod(chapterTitleSchema));
 		if (!form.valid) {
 			return fail(400, {
 				form
@@ -346,7 +346,7 @@ export const actions = {
 
 			for (const chapter of course.expand?.['chapters(course)'] ?? []) {
 				if (chapter.expand?.['muxData(chapterId)']) {
-					await Video.Assets.del(chapter.expand['muxData(chapterId)'][0].assetId);
+					await mux.video.assets.delete(chapter.expand['muxData(chapterId)'][0].assetId);
 				}
 			}
 			await pb.collection('courses').delete(courseId);

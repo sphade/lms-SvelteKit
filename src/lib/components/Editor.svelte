@@ -2,7 +2,9 @@
 	import 'quill/dist/quill.snow.css';
 	import { onMount } from 'svelte';
 	let editor: string | Element;
-	import { getFormField } from 'formsnap';
+	import { getFormControl, getFormField } from 'formsnap';
+	import type { Infer } from 'sveltekit-superforms';
+	import type { chapterDescriptionSchema } from '$lib/schema';
 	export let toolbarOptions = [
 		[{ header: 1 }, { header: 2 }, 'blockquote', 'link'],
 		['bold', 'italic', 'underline', 'strike'],
@@ -10,7 +12,11 @@
 		[{ align: [] }],
 		['clean']
 	];
-	const { attrStore, value } = getFormField();
+
+	const { attrs } = getFormControl();
+	const {
+		form: { form }
+	} = getFormField<Infer<typeof chapterDescriptionSchema>, 'description'>();
 
 	onMount(async () => {
 		const { default: Quill } = await import('quill');
@@ -21,19 +27,19 @@
 			theme: 'snow',
 			placeholder: 'Write your story...'
 		});
-		const initialData = $value as string;
+		const initialData = $form.description as string;
 		quill.clipboard.dangerouslyPasteHTML(initialData);
 		quill.on('text-change', function (delta, oldDelta, source) {
 			if (source == 'api') {
 				console.log('An API call triggered this change.');
 			} else if (source == 'user') {
-				$value = quill.root.innerHTML;
+				$form.description = quill.root.innerHTML;
 			}
 		});
 	});
 </script>
 
 <div class="bg-background">
-	<input type="text" {...$attrStore} hidden bind:value={$value} />
+	<input type="text" {...$attrs} hidden bind:value={$form.description} />
 	<div bind:this={editor} />
 </div>

@@ -14,7 +14,7 @@
 	</DropdownMenu.Trigger>
 	<DropdownMenu.Content align="end">
 		<DropdownMenu.Item href="/teacher/courses/{id}">
-			<Pencil class="h-4 w-4 mr-2" />
+			<Pencil class="size-4 mr-2" />
 			Edit</DropdownMenu.Item
 		>
 	</DropdownMenu.Content>

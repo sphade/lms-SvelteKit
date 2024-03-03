@@ -1,10 +1,11 @@
 import { titleSchema } from '$lib/schema';
 import { fail, redirect } from '@sveltejs/kit';
 import type { ClientResponseError, RecordModel } from 'pocketbase';
-import { message, superValidate } from 'sveltekit-superforms/server';
+import { zod } from 'sveltekit-superforms/adapters';
+import { message, superValidate } from 'sveltekit-superforms';
 
 export const load = async () => {
-	const form = await superValidate(titleSchema);
+	const form = await superValidate(zod(titleSchema));
 
 	return {
 		form
@@ -19,7 +20,7 @@ export const actions = {
 		// Simulate loading state for 5 seconds
 		// await new Promise((resolve) => setTimeout(resolve, 5000));
 
-		const form = await superValidate(event, titleSchema);
+		const form = await superValidate(event, zod(titleSchema));
 		if (!form.valid) {
 			return fail(400, {
 				form

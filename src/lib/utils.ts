@@ -54,7 +54,6 @@ export const flyAndScale = (
 		easing: cubicOut
 	};
 };
-
 export function getDownloadUrl({
 	collectionId,
 	recordId,
